@@ -45,3 +45,24 @@ COMMANDS:
 }
 
 [ -z "$1" ] && usage && die
+
+case "$1" in
+  "add")
+    ;;
+  "ls"|"list")
+    ;;
+  "open")
+    ;;
+  "rm"|"remove")
+    ;;
+  "edit")
+    ;;
+  "-h"|"--help")
+    usage && die
+    ;;
+  "-v"|"--version")
+    ;;
+  *)
+    die "Invalid command. Use 'sxbm -h' for help!"
+    ;;
+esac
