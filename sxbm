@@ -21,3 +21,6 @@ COL_TITLE="\033[1;33m"    # Yellow
 
 # 1 to enable encryption, 0 to disable it
 ENCRYPTION="0"
+
+# Auto fetch title. 1 to enable, 0 to disable
+TITLE_FETCH="1"
