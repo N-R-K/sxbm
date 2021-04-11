@@ -3,3 +3,21 @@
 # Description: A cli bookmark manager written in POSIX shell
 #
 # Author: NRK
+
+##########
+# CONFIG #
+##########
+
+# Where all the data gets stored
+# Respects XDG_DATA_HOME if set
+[ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
+DATA_DIR="${XDG_DATA_HOME}/sxbm"
+
+# Colors
+# For a list of ANSI color codes, check the link below
+# https://gist.github.com/Prakasaka/219fe5695beeb4d6311583e79933a009
+COL_LINK="\033[1;31m"     # Red
+COL_TITLE="\033[1;33m"    # Yellow
+
+# 1 to enable encryption, 0 to disable it
+ENCRYPTION="0"
