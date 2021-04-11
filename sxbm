@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Description: A cli bookmark manager written in POSIX shell
+#
+# Author: NRK
