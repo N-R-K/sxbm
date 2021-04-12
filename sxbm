@@ -67,6 +67,13 @@ bm_list(){
         ;;
     esac
   done
+
+  awk -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
+    -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY="$QUERY_TITLE" \
+    ' $0 ~ QUERY { LINK=$1; $1="";
+    gsub(/+\w+/,"");
+    print COL_LINE_NUM NR ") " COL_LINK LINK " " COL_TITLE $0 ; }' \
+    "/artix/home/nrk/documents/source/sxbm/bookmarks"
 }
 
 ############
