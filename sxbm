@@ -51,6 +51,22 @@ COMMANDS:
     -v|--version  print the version and exit\n\n"
 }
 
+bm_add(){
+  [ -z "$1" ] && die "No arguments provided. Use 'sxbm -h' for help"
+
+  # TODO while functional, this is extremely fucking stupid.
+  # there has to be a better way to do this.
+  local LINK=$( echo "$@" | tr " " "\n" | grep -E "\w+\.\w+" )
+  [ -z "$LINK" ] && die "No links found"
+  [ "$( echo "$LINK" | wc -l )" -gt 1 ] && die "Too many links!!\n$LINK"
+
+  local TAGS=$( echo "$@" | grep -o -E "\+\w+" | tr "\n" " " )
+  local TITLE=$( echo "$@" | tr " " "\n" | sed '/^+/d;/.*\.[a-zA-Z]/d' | tr "\n" " " )
+
+  echo "$LINK $TITLE $TAGS" >> $DATA_FILE &&
+    echo "Link $(wc -l < "$DATA_FILE") added successfully!" ||
+    die "Couldn't add link"
+}
 
 ############
 ### main ###
@@ -64,6 +80,8 @@ COMMANDS:
 
 case "$1" in
   "add")
+    shift
+    bm_add "$@"
     ;;
   "ls"|"list")
     ;;
