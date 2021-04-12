@@ -56,7 +56,7 @@ COMMANDS:
 ### main ###
 ############
 
-[ -z "$1" ] && usage && die
+[ -z "$1" ] && usage && die "No command given"
 
 case "$1" in
   "add")
