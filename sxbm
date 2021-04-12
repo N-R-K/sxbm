@@ -27,6 +27,11 @@ ENCRYPTION="0"
 # Auto fetch title. 1 to enable, 0 to disable
 TITLE_FETCH="1"
 
+
+#################
+### functions ###
+#################
+
 die(){
   [ -z "$1" ] ||
     printf "$@\n" > /dev/stderr
@@ -45,6 +50,11 @@ COMMANDS:
     -h|--help     print this text and exit
     -v|--version  print the version and exit\n\n"
 }
+
+
+############
+### main ###
+############
 
 [ -z "$1" ] && usage && die
 
