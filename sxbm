@@ -18,7 +18,7 @@ DATA_FILE="${DATA_DIR}/bookmarks"
 # For a list of ANSI color codes, check the link below
 # https://gist.github.com/Prakasaka/219fe5695beeb4d6311583e79933a009
 COL_LINK="\033[1;31m"     # Red
-COL_TITLE="\033[1;33m"    # Yellow
+COL_TITLE="\033[0;33m"    # Yellow
 COL_LINE_NUM="\033[1;34m" # Blue
 
 # 1 to enable encryption, 0 to disable it
