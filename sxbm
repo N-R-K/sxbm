@@ -51,6 +51,23 @@ COMMANDS:
     -v|--version  print the version and exit\n\n"
 }
 
+bm_list(){
+  while [ -n "$1" ]; do
+    case "$1" in
+      "-c"|"--disable-colors")
+        COL_LINK=""; COL_TITLE=""; COL_LINE_NUM=""
+        shift
+        ;;
+      "-s"|"--strict")
+        local TAG_STRICT="1"
+        shift
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+}
 
 ############
 ### main ###
@@ -66,6 +83,8 @@ case "$1" in
   "add")
     ;;
   "ls"|"list")
+    shift
+    bm_list "$@"
     ;;
   "open")
     ;;
