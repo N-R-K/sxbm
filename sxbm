@@ -83,6 +83,16 @@ bm_list(){
       esac
     done
 
+  [ -n "$QUERY_LINE" ] &&
+  [ $QUERY_LINE -gt $(wc -l < "$DATA_FILE") ] &&
+    die "$QUERY_LINE doesn't exist. Use 'sxbm ls' to list all bookmark" ||
+    awk -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
+      -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY_LINE="$QUERY_LINE" \
+      ' NR == QUERY_LINE { LINK=$1; $1="";
+      gsub(/+\w+/,"");
+      print COL_LINE_NUM NR ") " COL_LINK LINK " " COL_TITLE $0 ; }' \
+      "$DATA_FILE"
+
   awk -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
     -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY_TITLE="$QUERY_TITLE" \
     ' BEGIN{IGNORECASE=1}
