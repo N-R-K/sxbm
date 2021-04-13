@@ -101,6 +101,17 @@ bm_list(){
   [ -n "$QUERY_TITLE" ] &&
     QUERY_TITLE=$(echo "$QUERY_TITLE" | sed 's/ *$//;s/ /" -e "/g;s/^/-e "/;s/$/"/')
 
+  [ -n "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ] &&
+    eval grep -w -n "$QUERY_TAG" "$DATA_FILE" |
+    eval grep -i "$QUERY_TITLE"
+
+  [ -n "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ] &&
+    eval grep -w -n "$QUERY_TAG" "$DATA_FILE"
+
+  [ -z "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ] &&
+    eval grep -i -n "$QUERY_TITLE" "$DATA_FILE"
+
+  [ -z "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ] &&
   awk -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
     -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY_TITLE="$QUERY_TITLE" \
     ' BEGIN{IGNORECASE=1}
