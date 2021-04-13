@@ -68,12 +68,28 @@ bm_list(){
     esac
   done
 
+  expr "$1" : '[0-9]' > /dev/null &&
+    local QUERY_LINE="$1" ||
+    while [ -n "$1" ]; do
+      case "$1" in
+        +*)
+          local QUERY_TAG="${QUERY_TAG}$1 "
+          shift
+          ;;
+        *)
+          local QUERY_TITLE="${QUERY_TITLE}$1 "
+          shift
+          ;;
+      esac
+    done
+
   awk -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
-    -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY="$QUERY_TITLE" \
-    ' $0 ~ QUERY { LINK=$1; $1="";
+    -v COL_LINE_NUM=$COL_LINE_NUM -v QUERY_TITLE="$QUERY_TITLE" \
+    ' BEGIN{IGNORECASE=1}
+    $0 ~ QUERY_TITLE { LINK=$1; $1="";
     gsub(/+\w+/,"");
     print COL_LINE_NUM NR ") " COL_LINK LINK " " COL_TITLE $0 ; }' \
-    "/artix/home/nrk/documents/source/sxbm/bookmarks"
+    "$DATA_FILE"
 }
 
 ############
