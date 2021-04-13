@@ -55,7 +55,7 @@ bm_list(){
   while [ -n "$1" ]; do
     case "$1" in
       "-c"|"--disable-colors")
-        COL_LINK=""; COL_TITLE=""; COL_LINE_NUM=""
+        COL_LINK=""; COL_TITLE=""; COL_LINE_NUM="";
         shift
         ;;
       "-s"|"--strict")
