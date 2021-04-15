@@ -52,6 +52,9 @@ COMMANDS:
 }
 
 bm_list(){
+  local QUERY_TAG="-n "
+  local QUERY_TITLE="-n "
+
   while [ -n "$1" ]; do
     case "$1" in
       "-c"|"--disable-colors")
@@ -59,7 +62,8 @@ bm_list(){
         shift
         ;;
       "-s"|"--strict")
-        local TAG_STRICT="1"
+        QUERY_TAG=""
+        QUERY_TITLE=""
         shift
         ;;
       *)
@@ -68,47 +72,44 @@ bm_list(){
     esac
   done
 
+  # POSIX shell doesn't have arrays.
+  # Desperate times calls for desperate measures!
   while [ -n "$1" ]; do
     case "$1" in
       +*)
-        local QUERY_TAG="${QUERY_TAG}$1 "
+        [ "${QUERY_TAG#-n}" != "$QUERY_TAG" ] &&
+          QUERY_TAG="${QUERY_TAG}-e '/[[:space:]]$1[[:space:]]/p' " ||
+          QUERY_TAG="${QUERY_TAG}-e '/[[:space:]]$1[[:space:]]/!d' "
         shift
         ;;
       *)
-        local QUERY_TITLE="${QUERY_TITLE}$1 "
+        [ "${QUERY_TITLE#-n}" != "$QUERY_TITLE" ] &&
+          QUERY_TITLE="${QUERY_TITLE}-e '/$1/p' " ||
+          QUERY_TITLE="${QUERY_TITLE}-e '/$1/!d' "
         shift
         ;;
     esac
   done
 
-  # POSIX shell doesn't have arrays.
-  # Desperate times calls for desperate measures!
-  [ -n "$QUERY_TAG" ] &&
-    QUERY_TAG=$(echo "$QUERY_TAG" | sed 's/ *$//;s/ /" -e "/g;s/^/-e "/;s/$/"/')
+  # TODO print the line number
+  # TODO fix double print if --strict not used
+    # '/[[:space:]]+apps[[:space:]]\|[[:space:]]+lmao[[:space:]]/p'
+  # TODO title search needs to exclude +tags
+    # 's/[[:space:]]+[^[:space:]]\{1,\}//g' this kills the tags
+  # TODO title search needs to be case insensitive
 
-  [ -n "$QUERY_TITLE" ] &&
-    QUERY_TITLE=$(echo "$QUERY_TITLE" | sed 's/ *$//;s/ /" -e "/g;s/^/-e "/;s/$/"/')
+  [ "${#QUERY_TAG}" -le 3 ] && [ "${#QUERY_TITLE}" -le 3 ] &&
+    sed "" "$DATA_FILE"
 
-  [ -n "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ] &&
-    eval grep -w -n "$QUERY_TAG" "$DATA_FILE" |
-    eval grep -i "$QUERY_TITLE" |
-    sed 's/:/) /;s/+.*//g;s/ *$//'
+  [ "${#QUERY_TAG}" -le 3 ] && [ "${#QUERY_TITLE}" -gt 3 ] &&
+    eval sed "$QUERY_TITLE" "$DATA_FILE"
 
-  [ -n "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ] &&
-    eval grep -w -n "$QUERY_TAG" "$DATA_FILE" |
-    sed 's/:/) /;s/+.*//g;s/ *$//'
+  [ "${#QUERY_TAG}" -gt 3 ] && [ "${#QUERY_TITLE}" -le 3 ] &&
+    eval sed "$QUERY_TAG" "$DATA_FILE"
 
-  [ -z "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ] &&
-    eval grep -i -n "$QUERY_TITLE" "$DATA_FILE" |
-    sed 's/:/) /;s/+.*//g;s/ *$//'
-
-  [ -z "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ] &&
-  awk -v COL_LINE_NUM=$COL_LINE_NUM \
-    -v COL_TITLE="$COL_TITLE" -v COL_LINK="$COL_LINK" \
-    ' { LINK=$1; $1="";
-    gsub(/+\w+/,"");
-    print COL_LINE_NUM NR ") " COL_LINK LINK " " COL_TITLE $0 ; }' \
-    "$DATA_FILE"
+  [ "${#QUERY_TAG}" -gt 3 ] && [ "${#QUERY_TITLE}" -gt 3 ] &&
+    eval sed "$QUERY_TAG" "$DATA_FILE" |
+    eval sed "$QUERY_TITLE"
 }
 
 ############
