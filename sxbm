@@ -52,8 +52,9 @@ COMMANDS:
 }
 
 bm_list(){
-  local QUERY_TAG="-n "
-  local QUERY_TITLE="-n "
+  local QUERY_TAG
+  local QUERY_TITLE
+  local QUERY_STRICT="||"
 
   while [ -n "$1" ]; do
     case "$1" in
@@ -62,8 +63,7 @@ bm_list(){
         shift
         ;;
       "-s"|"--strict")
-        QUERY_TAG=""
-        QUERY_TITLE=""
+        local QUERY_STRICT="&&"
         shift
         ;;
       *)
@@ -77,39 +77,41 @@ bm_list(){
   while [ -n "$1" ]; do
     case "$1" in
       +*)
-        [ "${QUERY_TAG#-n}" != "$QUERY_TAG" ] &&
-          QUERY_TAG="${QUERY_TAG}-e '/[[:space:]]$1[[:space:]]/p' " ||
-          QUERY_TAG="${QUERY_TAG}-e '/[[:space:]]$1[[:space:]]/!d' "
+        [ -z "$QUERY_TAG" ] &&
+          QUERY_TAG="/[[:space:]]\\$1[[:space:]]/" ||
+          QUERY_TAG="${QUERY_TAG} $QUERY_STRICT /[[:space:]]\\$1[[:space:]]/"
         shift
         ;;
       *)
-        [ "${QUERY_TITLE#-n}" != "$QUERY_TITLE" ] &&
-          QUERY_TITLE="${QUERY_TITLE}-e '/$1/p' " ||
-          QUERY_TITLE="${QUERY_TITLE}-e '/$1/!d' "
+        if [ "$QUERY_STRICT" = "&&" ]; then
+          [ -z "$QUERY_TITLE" ] &&
+            QUERY_TITLE="grep -i -e \"$1\"" ||
+            QUERY_TITLE="${QUERY_TITLE} | grep -i -e \"$1\""
+        else
+          [ -z "$QUERY_TITLE" ] &&
+            QUERY_TITLE="grep -i -e \"$1\"" ||
+            QUERY_TITLE="${QUERY_TITLE} -e \"$1\""
+        fi
         shift
         ;;
     esac
   done
 
-  # TODO print the line number
-  # TODO fix double print if --strict not used
-    # '/[[:space:]]+apps[[:space:]]\|[[:space:]]+lmao[[:space:]]/p'
-  # TODO title search needs to exclude +tags
-    # 's/[[:space:]]+[^[:space:]]\{1,\}//g' this kills the tags
-  # TODO title search needs to be case insensitive
+  [ -z "$QUERY_TITLE" ] &&
+    awk --posix -v COL_LINE_NUM="$COL_LINE_NUM" \
+      -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
+      "$QUERY_TAG { LINK=\$1; \$1=\"\";
+      gsub(/[[:space:]]\+[^[:space:]]+/,\"\");
+      print COL_LINE_NUM NR \") \" COL_LINK LINK \" \" COL_TITLE \$0 }" \
+      "$DATA_FILE"
 
-  [ "${#QUERY_TAG}" -le 3 ] && [ "${#QUERY_TITLE}" -le 3 ] &&
-    sed "" "$DATA_FILE"
-
-  [ "${#QUERY_TAG}" -le 3 ] && [ "${#QUERY_TITLE}" -gt 3 ] &&
-    eval sed "$QUERY_TITLE" "$DATA_FILE"
-
-  [ "${#QUERY_TAG}" -gt 3 ] && [ "${#QUERY_TITLE}" -le 3 ] &&
-    eval sed "$QUERY_TAG" "$DATA_FILE"
-
-  [ "${#QUERY_TAG}" -gt 3 ] && [ "${#QUERY_TITLE}" -gt 3 ] &&
-    eval sed "$QUERY_TAG" "$DATA_FILE" |
-    eval sed "$QUERY_TITLE"
+  [ -n "$QUERY_TITLE" ] &&
+    awk --posix -v COL_LINE_NUM="$COL_LINE_NUM" \
+      -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
+      "$QUERY_TAG { LINK=\$1; \$1=\"\";
+      gsub(/[[:space:]]\+[^[:space:]]+/,\"\");
+      print COL_LINE_NUM NR \") \" COL_LINK LINK \" \" COL_TITLE \$0 }" \
+      "$DATA_FILE" | eval "$QUERY_TITLE"
 }
 
 ############
