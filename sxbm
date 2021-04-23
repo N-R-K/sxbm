@@ -133,6 +133,20 @@ bm_list(){
       "$DATA_FILE" | eval "$QUERY_TITLE"
 }
 
+bm_open(){
+  [ -z "$1" ] && die "No arguments given"
+
+  if [ $( bm_list "$@" | wc -l ) -eq 1 ]; then
+    local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
+  else
+    [ $( bm_list "$@" | wc -l ) -gt 1 ] &&
+      die "Too many links" ||
+      die "No links"
+  fi
+
+  $BROWSER $LINK
+}
+
 ############
 ### main ###
 ############
@@ -153,6 +167,8 @@ case "$1" in
     bm_list "$@"
     ;;
   "open")
+    shift
+    bm_open "$@"
     ;;
   "rm"|"remove")
     ;;
