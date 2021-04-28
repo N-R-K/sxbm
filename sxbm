@@ -135,13 +135,25 @@ bm_list(){
 
 bm_open(){
   [ -z "$1" ] && die "No arguments given"
+  while [ -n "$1" ]; do
+    case "$1" in
+      "-f"|"--force")
+        local FORCE="1"
+        shift
+        ;;
+      *)
+        local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
+        shift "$#"
+        ;;
+    esac
+  done
 
-  if [ $( bm_list "$@" | wc -l ) -eq 1 ]; then
-    local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
-  else
-    [ $( bm_list "$@" | wc -l ) -gt 1 ] &&
-      die "Too many links" ||
-      die "No links"
+  [ -z "$LINK" ] && die "No links found"
+
+  local LINK_NUM=$( printf "$LINK" | wc -l )
+
+  if [ "$LINK_NUM" -gt 0 ]; then
+    die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$(bm_list "-c" "$@")"
   fi
 
   $BROWSER $LINK
