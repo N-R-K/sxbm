@@ -141,6 +141,10 @@ bm_open(){
         local FORCE="1"
         shift
         ;;
+      [0-9])
+        local LINK=$( awk "NR == $1 {print \$1}" $DATA_FILE )
+        shift
+        ;;
       *)
         local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
         shift "$#"
