@@ -134,24 +134,17 @@ bm_list(){
 }
 
 bm_open(){
+  if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
+    local FORCE=1
+    shift
+  fi
   [ -z "$1" ] && die "No arguments given"
-  while [ -n "$1" ]; do
-    case "$1" in
-      "-f"|"--force")
-        local FORCE="1"
-        shift
-        ;;
-      [0-9])
-        local LINK=$( awk "NR == $1 {print \$1}" $DATA_FILE )
-        shift
-        ;;
-      *)
-        local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
-        shift "$#"
-        ;;
-    esac
-  done
 
+  if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
+    local LINK=$( awk "NR == $1 {print \$1}" $DATA_FILE )
+  else
+    local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
+  fi
 
   [ -n "$LINK" ] &&
     local LINK_NUM=$( printf "$LINK" | wc -l ) ||
