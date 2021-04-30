@@ -152,9 +152,10 @@ bm_open(){
     esac
   done
 
-  [ -z "$LINK" ] && die "No links found"
 
-  local LINK_NUM=$( printf "$LINK" | wc -l )
+  [ -n "$LINK" ] &&
+    local LINK_NUM=$( printf "$LINK" | wc -l ) ||
+    die "No links found"
 
   if [ "$LINK_NUM" -gt 0 ]; then
     die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$(bm_list "-c" "$@")"
