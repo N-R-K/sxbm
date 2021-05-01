@@ -8,10 +8,13 @@
 # CONFIG #
 ##########
 
+# Appname
+APPNAME="sxbm"
+
 # Where all the data gets stored
 # Respects XDG_DATA_HOME if set
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
-DATA_DIR="${XDG_DATA_HOME}/sxbm"
+DATA_DIR="${XDG_DATA_HOME}/${APPNAME}"
 DATA_FILE="${DATA_DIR}/bookmarks"
 
 # Colors
@@ -39,7 +42,7 @@ die(){
 }
 
 usage(){
-  printf "Usage: sxbm <command> [<args>]\n"
+  printf "Usage: $APPNAME <command> [<args>]\n"
   printf "
 COMMANDS:
     add           <link> [title] [+tags]
@@ -52,7 +55,7 @@ COMMANDS:
 }
 
 bm_add(){
-  [ -z "$1" ] && die "No arguments provided. Use 'sxbm -h' for help"
+  [ -z "$1" ] && die "No arguments provided. Use '$APPNAME -h' for help"
 
   # TODO while functional, this is extremely fucking stupid.
   # there has to be a better way to do this.
@@ -151,7 +154,7 @@ bm_open(){
     die "No links found"
 
   if [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ]; then
-    die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$( echo "$LINK" )"
+    die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$( echo "$LINK" )"
   fi
 
   $BROWSER $( echo "$LINK" | awk '{print $2;gsub(/\n/," ")}' ) 1>/dev/null 2>&1 &
@@ -190,6 +193,6 @@ case "$1" in
   "-v"|"--version")
     ;;
   *)
-    die "Invalid command. Use 'sxbm -h' for help!"
+    die "Invalid command. Use '$APPNAME -h' for help!"
     ;;
 esac
