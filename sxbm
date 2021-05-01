@@ -188,7 +188,7 @@ case "$1" in
   "edit")
     ;;
   "-h"|"--help")
-    usage && die
+    usage && exit 0
     ;;
   "-v"|"--version")
     ;;
