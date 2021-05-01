@@ -150,11 +150,14 @@ bm_open(){
     local LINK_NUM=$( echo "$LINK" | wc -l ) ||
     die "No links found"
 
-  if [ "$LINK_NUM" -gt 1 ]; then
+  if [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ]; then
     die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$( echo "$LINK" )"
   fi
 
-  $BROWSER $( echo "$LINK" | awk "{print \$2}" )
+  while [ "$LINK_NUM" -gt 0 ]; do
+    $BROWSER $( echo "$LINK" | awk "NR == $LINK_NUM {print \$2}" )
+    LINK_NUM=$(($LINK_NUM - 1))
+  done
 }
 
 ############
