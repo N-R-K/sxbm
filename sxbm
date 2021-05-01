@@ -143,18 +143,18 @@ bm_open(){
   if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
     local LINK=$( awk "NR == $1 {print \$1}" $DATA_FILE )
   else
-    local LINK=$( bm_list "-c" "$@" | awk '{print $2}' )
+    local LINK=$( bm_list "-c" "$@" )
   fi
 
   [ -n "$LINK" ] &&
-    local LINK_NUM=$( printf "$LINK" | wc -l ) ||
+    local LINK_NUM=$( echo "$LINK" | wc -l ) ||
     die "No links found"
 
-  if [ "$LINK_NUM" -gt 0 ]; then
-    die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$(bm_list "-c" "$@")"
+  if [ "$LINK_NUM" -gt 1 ]; then
+    die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$( echo "$LINK" )"
   fi
 
-  $BROWSER $LINK
+  $BROWSER $( echo "$LINK" | awk "{print \$2}" )
 }
 
 ############
