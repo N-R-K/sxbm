@@ -8,8 +8,9 @@
 # CONFIG #
 ##########
 
-# Appname
+# Appname and Version
 APPNAME="sxbm"
+VERSION="v0.1"
 
 # Where all the data gets stored
 # Respects XDG_DATA_HOME if set
@@ -52,6 +53,12 @@ COMMANDS:
     edit          [line_num|title|+tags]
     -h|--help     print this text and exit
     -v|--version  print the version and exit\n\n"
+}
+
+version(){
+  printf "$APPNAME $VERSION\n"
+  printf "GPLv3 license\n"
+  printf "https://github.com/n-r-k/sxbm\n"
 }
 
 bm_add(){
@@ -191,6 +198,7 @@ case "$1" in
     usage && exit 0
     ;;
   "-v"|"--version")
+    version && exit 0
     ;;
   *)
     die "Invalid command. Use '$APPNAME -h' for help!"
