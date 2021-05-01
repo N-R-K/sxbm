@@ -78,8 +78,8 @@ bm_list(){
     case "$1" in
       +*)
         [ -z "$QUERY_TAG" ] &&
-          QUERY_TAG="/[[:space:]]\\$1[[:space:]]/" ||
-          QUERY_TAG="${QUERY_TAG} $QUERY_STRICT /[[:space:]]\\$1[[:space:]]/"
+          QUERY_TAG="/[[:blank:]]\\$1[[:space:]]/" ||
+          QUERY_TAG="${QUERY_TAG} $QUERY_STRICT /[[:blank:]]\\$1[[:space:]]/"
         shift
         ;;
       *)
