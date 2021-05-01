@@ -133,6 +133,30 @@ bm_list(){
       "$DATA_FILE" | eval "$QUERY_TITLE"
 }
 
+bm_open(){
+  if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
+    local FORCE=1
+    shift
+  fi
+  [ -z "$1" ] && die "No arguments given"
+
+  if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
+    local LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' $DATA_FILE )
+  else
+    local LINK=$( bm_list "-c" "$@" )
+  fi
+
+  [ -n "$LINK" ] &&
+    local LINK_NUM=$( echo "$LINK" | wc -l ) ||
+    die "No links found"
+
+  if [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ]; then
+    die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$( echo "$LINK" )"
+  fi
+
+  $BROWSER $( echo "$LINK" | awk '{print $2;gsub(/\n/," ")}' ) 1>/dev/null 2>&1 &
+}
+
 ############
 ### main ###
 ############
@@ -153,6 +177,8 @@ case "$1" in
     bm_list "$@"
     ;;
   "open")
+    shift
+    bm_open "$@"
     ;;
   "rm"|"remove")
     ;;
