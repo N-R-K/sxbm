@@ -154,10 +154,7 @@ bm_open(){
     die "Too many links\nUse 'sxbm open -f' to force open them all\n\n$( echo "$LINK" )"
   fi
 
-  while [ "$LINK_NUM" -gt 0 ]; do
-    $BROWSER $( echo "$LINK" | awk "NR == $LINK_NUM {print \$2}" )
-    LINK_NUM=$(($LINK_NUM - 1))
-  done
+  $BROWSER $( echo "$LINK" | awk '{print $2;gsub(/\n/," ")}' )
 }
 
 ############
