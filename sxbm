@@ -167,7 +167,7 @@ bm_open(){
 [ -z "$1" ] && usage && die "No command given"
 
 [ -d "$DATA_DIR" ] ||
-  mkdir "$DATA_DIR" ||
+  mkdir -p "$DATA_DIR" ||
   die "Unable to create $DATA_DIR"
 
 case "$1" in
