@@ -5,7 +5,7 @@ It's written in strictly POSIX compliant shell, so it should work fine on all \*
 Sxbm stores your bookmarks in a plain text file making it easily portable.
 Bookmarks are categorized via tags as opposed to the inferior folder structure found in browsers.
 
-## Installation and Usage
+## Installation
 Cone the repo.
 
 ```
