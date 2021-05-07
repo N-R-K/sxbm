@@ -1,7 +1,9 @@
 # sxbm
-Simple Unix Bookmark Manager, a posix compliant shell script for managing your bookmarks.
+I needed a simple and browser-independent way of managing my bookmarks, leading to the creation of sxbm.
+It's written in strictly POSIX compliant shell, so it should work fine on all \*nix based operating system.
 
-The script stores your bookmarks on a plain text file making it easily portable.
+Sxbm stores your bookmarks in a plain text file making it easily portable.
+Bookmarks are categorized via tags as opposed to the inferior folder structure found in browsers.
 
 ## Installation and Usage
 Cone the repo.
