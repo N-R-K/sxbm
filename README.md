@@ -21,7 +21,8 @@ Adding a bookmark (title and tag are optional.)
 sxbm add link.com title +tag
 ```
 
-Opening a bookmark. You need to specify a title, tag or line_number. If there are multiple results use `sxbm open -f` to open them all.
+Opening a bookmark. You need to specify a title, tag or line\_number.
+If there are multiple results use `sxbm open -f` to open them all.
 ```
 sxbm open <title|+tag|line_number>
 ```
