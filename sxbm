@@ -28,6 +28,7 @@ COL_TITLE="\033[0;33m"    # Yellow
 COL_LINE_NUM="\033[1;34m" # Blue
 
 # 1 to enable encryption, 0 to disable it
+# This currently does nothing, since the feature isn't implemented yet.
 ENCRYPTION="0"
 
 
