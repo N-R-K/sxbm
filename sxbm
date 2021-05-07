@@ -48,8 +48,7 @@ COMMANDS:
     add           <link> [title] [+tags]
     ls|list       [-s|--strict] [-c|--disable-colors] [title] [+tags]
     open          [-f|--force] <line_num|title|+tags>
-    rm|remove     [-f|--force] <line_num|title|+tags>
-    edit          [line_num|title|+tags]
+    edit
     -h|--help     print this text and exit
     -v|--version  print the version and exit\n\n"
 }
