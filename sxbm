@@ -166,6 +166,10 @@ bm_open(){
   $BROWSER $( echo "$LINK" | awk '{print $2;gsub(/\n/," ")}' ) 1>/dev/null 2>&1 &
 }
 
+bm_edit(){
+  $EDITOR "$DATA_FILE"
+}
+
 ############
 ### main ###
 ############
@@ -192,6 +196,8 @@ case "$1" in
   "rm"|"remove")
     ;;
   "edit")
+    shift
+    bm_edit "$@"
     ;;
   "-h"|"--help")
     usage && exit 0
