@@ -65,14 +65,14 @@ bm_add(){
 
   # TODO while functional, this is extremely fucking stupid.
   # there has to be a better way to do this.
-  local LINK=$( echo "$@" | grep -o "[^[:space:]]\+\.[^[:space:]]\+" )
+  LINK=$( echo "$@" | grep -o "[^[:space:]]\+\.[^[:space:]]\+" )
   [ -z "$LINK" ] && die "No links found"
   [ "$( echo "$LINK" | wc -l )" -gt 1 ] && die "Too many links!!\n$LINK"
 
-  local REMAINING=$( echo "$@" | tr " " "\n" | grep -v "[^[:space:]]\+\.[^[:space:]]\+" )
+  REMAINING=$( echo "$@" | tr " " "\n" | grep -v "[^[:space:]]\+\.[^[:space:]]\+" )
   [ -n "$REMAINING" ] &&
-    local TAGS=$( echo "$REMAINING" | grep "^\\+[^[:space:]]" | tr "\n" " " ) &&
-    local TITLE=$( echo "$REMAINING" | grep -v "^\\+[^[:space:]]" | tr "\n" " " )
+    TAGS=$( echo "$REMAINING" | grep "^\\+[^[:space:]]" | tr "\n" " " ) &&
+    TITLE=$( echo "$REMAINING" | grep -v "^\\+[^[:space:]]" | tr "\n" " " )
 
   echo "$LINK $TITLE $TAGS" >> $DATA_FILE &&
     echo "Link $(wc -l < "$DATA_FILE") added successfully!" ||
@@ -80,9 +80,9 @@ bm_add(){
 }
 
 bm_list(){
-  local QUERY_TAG
-  local QUERY_TITLE
-  local QUERY_STRICT="||"
+  QUERY_TAG=""
+  QUERY_TITLE=""
+  QUERY_STRICT="||"
 
   while [ -n "$1" ]; do
     case "$1" in
@@ -91,7 +91,7 @@ bm_list(){
         shift
         ;;
       "-s"|"--strict")
-        local QUERY_STRICT="&&"
+        QUERY_STRICT="&&"
         shift
         ;;
       *)
@@ -144,19 +144,19 @@ bm_list(){
 
 bm_open(){
   if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
-    local FORCE=1
+    FORCE=1
     shift
   fi
   [ -z "$1" ] && die "No arguments given"
 
   if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
-    local LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' $DATA_FILE )
+    LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' $DATA_FILE )
   else
-    local LINK=$( bm_list "-c" "$@" )
+    LINK=$( bm_list "-c" "$@" )
   fi
 
   [ -n "$LINK" ] &&
-    local LINK_NUM=$( echo "$LINK" | wc -l ) ||
+    LINK_NUM=$( echo "$LINK" | wc -l ) ||
     die "No links found"
 
   if [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ]; then
