@@ -108,21 +108,18 @@ bm_list(){
         [ -z "$QUERY_TAG" ] &&
           QUERY_TAG="/[[:blank:]]\\$1($| )/" ||
           QUERY_TAG="${QUERY_TAG} $QUERY_STRICT /[[:blank:]]\\$1($| )/"
-        shift
         ;;
       *)
-        if [ "$QUERY_STRICT" = "&&" ]; then
-          [ -z "$QUERY_TITLE" ] &&
-            QUERY_TITLE="grep -i -e \"$1\"" ||
-            QUERY_TITLE="${QUERY_TITLE} | grep -i -e \"$1\""
+        if [ -z "$QUERY_TITLE" ]; then
+          QUERY_TITLE="grep -i -e \"$1\""
         else
-          [ -z "$QUERY_TITLE" ] &&
-            QUERY_TITLE="grep -i -e \"$1\"" ||
+          [ "$QUERY_STRICT" = "&&" ] &&
+            QUERY_TITLE="${QUERY_TITLE} | grep -i -e \"$1\"" ||
             QUERY_TITLE="${QUERY_TITLE} -e \"$1\""
         fi
-        shift
         ;;
     esac
+    shift
   done
 
   [ -z "$QUERY_TITLE" ] &&
