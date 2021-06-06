@@ -123,7 +123,7 @@ bm_list(){
   done
 
   __tag_search(){
-    awk --posix -v COL_LINE_NUM="$COL_LINE_NUM" \
+    awk -v COL_LINE_NUM="$COL_LINE_NUM" \
       -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
       "$QUERY_TAG { LINK=\$1; \$1=\"\";
       gsub(/[[:space:]]\+[^[:space:]]+/,\"\");
