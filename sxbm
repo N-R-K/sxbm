@@ -132,9 +132,9 @@ bm_list(){
       "$DATA_FILE"
   }
 
-  [ -n "$QUERY_TITLE" ] &&
-    __tag_search | eval "$QUERY_TITLE" ||
-    __tag_search
+  [ -z "$QUERY_TITLE" ] &&
+    __tag_search ||
+    __tag_search | eval "$QUERY_TITLE"
 }
 
 bm_open(){
