@@ -63,16 +63,17 @@ version(){
 bm_add(){
   [ -z "$1" ] && die "No arguments provided. Use '$APPNAME -h' for help"
 
-  # TODO while functional, this is extremely fucking stupid.
-  # there has to be a better way to do this.
-  LINK=$( echo "$@" | grep -o "[^[:space:]]\+\.[^[:space:]]\+" )
+  while [ -n "$1" ]; do
+    case "$1" in
+      *.*) [ -z "$LINK" ] &&
+             LINK="$1" ||
+             die "too many links\n$LINK\n$1" ;;
+      +*) TAGS="${TAGS}$1 " ;;
+      *) TITLE="${TITLE}$1 " ;;
+    esac
+    shift
+  done
   [ -z "$LINK" ] && die "No links found"
-  [ "$( echo "$LINK" | wc -l )" -gt 1 ] && die "Too many links!!\n$LINK"
-
-  REMAINING=$( echo "$@" | tr " " "\n" | grep -v "[^[:space:]]\+\.[^[:space:]]\+" )
-  [ -n "$REMAINING" ] &&
-    TAGS=$( echo "$REMAINING" | grep "^\\+[^[:space:]]" | tr "\n" " " ) &&
-    TITLE=$( echo "$REMAINING" | grep -v "^\\+[^[:space:]]" | tr "\n" " " )
 
   echo "$LINK $TITLE $TAGS" >> $DATA_FILE &&
     echo "Link $(wc -l < "$DATA_FILE") added successfully!" ||
