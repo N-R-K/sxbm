@@ -43,11 +43,16 @@ Edit bookmarks.
 sxbm edit
 ```
 
+Remove a bookmark.
+```
+sxbm rm <line_number>
+```
+
 Run `sxbm --help` to see more detailed usage.
 
 ## Todo
 
-- [ ] Implement remove. Should take same arguments as `open`.
+- [ ] Enhance `remove` arguments. Should take same arguments as `open`.
 - [ ] Enhance `edit` arguments. Should take similar arguments as `open`.
 - [ ] Add a dmenu/rofi wrapper.
 - [ ] Add PGP encryption.

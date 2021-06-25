@@ -49,6 +49,7 @@ COMMANDS:
     add           <link> [title] [+tags]
     ls|list       [-s|--strict] [-c|--disable-colors] [title] [+tags]
     open          [-f|--force] <line_num|title|+tags>
+    rm|remove     <line_num>
     edit
     -h|--help     print this text and exit
     -v|--version  print the version and exit\n\n"
@@ -165,6 +166,22 @@ bm_edit(){
   $EDITOR "$DATA_FILE"
 }
 
+bm_remove(){
+  [ -z "$1" ] && die "No arguments given"
+
+  [ "$1" -eq "$1" 2>/dev/null ] &&
+    LINK=$(sed "$1q;d" $DATA_FILE) ||
+    die "Link not found"
+
+  printf "Delete this link? (y/n)\n$LINK\n"
+  read ANSWER
+  if [ "$ANSWER" = "y" ] || [ "$ANSWER" = "yes" ]; then
+    sed -i --follow-symlinks "$1d" "$DATA_FILE" &&
+      echo "Deleted successfully" ||
+      die "Couldn't delete link"
+  fi
+}
+
 ############
 ### main ###
 ############
@@ -189,6 +206,8 @@ case "$1" in
     bm_open "$@"
     ;;
   "rm"|"remove")
+    shift
+    bm_remove "$@"
     ;;
   "edit")
     shift
