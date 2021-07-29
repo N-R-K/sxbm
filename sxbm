@@ -156,7 +156,7 @@ bm_open(){
     die "No links found"
 
   [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ] &&
-    die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$( echo "$LINK" )"
+    die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$LINK"
 
   setsid $BROWSER $( echo "$LINK" | awk '{print $2;}' ) 1>/dev/null 2>&1
 }
