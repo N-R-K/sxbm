@@ -76,7 +76,7 @@ bm_add(){
   done
   [ -z "$LINK" ] && die "No links found"
 
-  echo "$LINK $TITLE $TAGS" >> $DATA_FILE &&
+  echo "$LINK $TITLE $TAGS" >> "$DATA_FILE" &&
     echo "Link $(wc -l < "$DATA_FILE") added successfully!" ||
     die "Couldn't add link"
 }
@@ -146,7 +146,7 @@ bm_open(){
   [ -z "$1" ] && die "No arguments given"
 
   if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
-    LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' $DATA_FILE )
+    LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' "$DATA_FILE" )
   else
     LINK=$( bm_list "-c" "$@" )
   fi
@@ -169,7 +169,7 @@ bm_remove(){
   [ -z "$1" ] && die "No arguments given"
 
   [ "$1" -eq "$1" 2>/dev/null ] &&
-    LINK=$(sed "$1q;d" $DATA_FILE) ||
+    LINK=$(sed "$1q;d" "$DATA_FILE") ||
     die "Link not found"
 
   printf "Delete this link? (y/n)\n$LINK\n"
