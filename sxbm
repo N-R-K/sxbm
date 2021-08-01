@@ -36,13 +36,13 @@ ENCRYPTION="0"
 ### functions ###
 #################
 
-die(){
-  [ -z "$1" ] ||
+die() {
+  [ -n "$1" ] &&
     printf "$@\n" > /dev/stderr
   exit 1
 }
 
-usage(){
+usage() {
   printf "Usage: $APPNAME <command> [<args>]\n"
   printf "
 COMMANDS:
@@ -55,13 +55,13 @@ COMMANDS:
     -v|--version  print the version and exit\n\n"
 }
 
-version(){
+version() {
   printf "$APPNAME $VERSION\n"
   printf "GPLv3 license\n"
   printf "https://github.com/n-r-k/sxbm\n"
 }
 
-bm_add(){
+bm_add() {
   [ -z "$1" ] && die "No arguments provided. Use '$APPNAME -h' for help"
 
   while [ -n "$1" ]; do
@@ -81,7 +81,7 @@ bm_add(){
     die "Couldn't add link"
 }
 
-bm_list(){
+bm_list() {
   QUERY_TAG=""
   QUERY_TITLE=""
   QUERY_STRICT="||"
@@ -124,7 +124,7 @@ bm_list(){
     shift
   done
 
-  __tag_search(){
+  __tag_search() {
     awk -v COL_LINE_NUM="$COL_LINE_NUM" \
       -v COL_LINK="$COL_LINK" -v COL_TITLE="$COL_TITLE" \
       "$QUERY_TAG { LINK=\$1; \$1=\"\";
@@ -138,7 +138,7 @@ bm_list(){
     __tag_search | eval "$QUERY_TITLE"
 }
 
-bm_open(){
+bm_open() {
   if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
     FORCE=1
     shift
@@ -161,11 +161,11 @@ bm_open(){
   setsid $BROWSER $( echo "$LINK" | awk '{print $2;}' ) 1>/dev/null 2>&1
 }
 
-bm_edit(){
+bm_edit() {
   $EDITOR "$DATA_FILE"
 }
 
-bm_remove(){
+bm_remove() {
   [ -z "$1" ] && die "No arguments given"
 
   [ "$1" -eq "$1" 2>/dev/null ] &&
