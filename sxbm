@@ -158,7 +158,7 @@ bm_open() {
   [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ] &&
     die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$LINK"
 
-  setsid $BROWSER $( echo "$LINK" | awk '{print $2;}' ) 1>/dev/null 2>&1
+  setsid $BROWSER $( echo "$LINK" | cut -d " " -f 2 ) 1>/dev/null 2>&1
 }
 
 bm_edit() {
