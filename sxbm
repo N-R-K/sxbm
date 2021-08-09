@@ -5,6 +5,7 @@
 # Author: NRK
 ## Copyright 2021 NRK
 ## Licensed under GPL v3. See LICENSE for more details.
+# set -x
 
 ##########
 # CONFIG #
@@ -81,6 +82,7 @@ bm_add() {
     die "Couldn't add link"
 }
 
+# this entire function is a massive joke
 bm_list() {
   QUERY_TAG=""
   QUERY_TITLE=""
@@ -146,19 +148,19 @@ bm_open() {
   [ -z "$1" ] && die "No arguments given"
 
   if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
-    LINK=$( awk -v F="$1" 'NR == F {print NR" "$1}' "$DATA_FILE" )
+    LINK=$(awk -v F="$1" 'NR == F {print NR" "$1}' "$DATA_FILE")
   else
-    LINK=$( bm_list "-c" "$@" )
+    LINK=$(bm_list "-c" "$@")
   fi
 
   [ -n "$LINK" ] &&
-    LINK_NUM=$( echo "$LINK" | wc -l ) ||
+    LINK_NUM=$(echo "$LINK" | wc -l) ||
     die "No links found"
 
   [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ] &&
     die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$LINK"
 
-  setsid $BROWSER $( echo "$LINK" | cut -d " " -f 2 ) 1>/dev/null 2>&1
+  setsid $BROWSER $(echo "$LINK" | cut -d " " -f 2) 1>/dev/null 2>&1
 }
 
 bm_edit() {
@@ -169,13 +171,13 @@ bm_remove() {
   [ -z "$1" ] && die "No arguments given"
 
   [ "$1" -eq "$1" 2>/dev/null ] &&
-    LINK=$(sed "$1q;d" "$DATA_FILE") ||
+    LINK=$(sed "${1}q;d" "$DATA_FILE") ||
     die "Link not found"
 
   printf "Delete this link? (y/n)\n$LINK\n"
   read ANSWER
   if [ "$ANSWER" = "y" ] || [ "$ANSWER" = "yes" ]; then
-    sed -i --follow-symlinks "$1d" "$DATA_FILE" &&
+    sed -i --follow-symlinks "${1}d" "$DATA_FILE" &&
       echo "Deleted successfully" ||
       die "Couldn't delete link"
   fi
