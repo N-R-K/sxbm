@@ -148,9 +148,9 @@ bm_open() {
   [ -z "$1" ] && die "No arguments given"
 
   if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
-    LINK=$(awk -v F="$1" 'NR == F {print NR" "$1}' "$DATA_FILE")
+    LINK=$(sed -n "s| .*||;${1}p;" "$DATA_FILE")
   else
-    LINK=$(bm_list "-c" "$@")
+    LINK=$(bm_list "-c" "$@" | cut -d " " -f 2)
   fi
 
   [ -n "$LINK" ] &&
@@ -160,7 +160,7 @@ bm_open() {
   [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ] &&
     die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$LINK"
 
-  setsid $BROWSER $(echo "$LINK" | cut -d " " -f 2) 1>/dev/null 2>&1
+  setsid $BROWSER $LINK 1>/dev/null 2>&1
 }
 
 bm_edit() {
