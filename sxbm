@@ -43,8 +43,9 @@ die() {
 }
 
 usage() {
-  printf "Usage: $APPNAME <command> [<args>]\n"
-  printf "
+  cat << EOF
+Usage: $APPNAME <command> [<args>]
+
 COMMANDS:
     add           <link> [title] [+tags]
     ls|list       [-s|--strict] [-c|--disable-colors] [title] [+tags]
@@ -52,13 +53,17 @@ COMMANDS:
     rm|remove     <line_num>
     edit
     -h|--help     print this text and exit
-    -v|--version  print the version and exit\n\n"
+    -v|--version  print the version and exit
+
+EOF
 }
 
 version() {
-  printf "$APPNAME $VERSION\n"
-  printf "GPLv3 license\n"
-  printf "https://github.com/n-r-k/sxbm\n"
+  cat << EOF
+$APPNAME $VERSION
+GPLv3 license
+https://github.com/n-r-k/sxbm
+EOF
 }
 
 bm_add() {
