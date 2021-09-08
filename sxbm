@@ -37,8 +37,7 @@ ENCRYPTION="0"
 #################
 
 die() {
-  [ -n "$1" ] &&
-    printf "$@\n" > /dev/stderr
+  [ -n "$1" ] && printf "$*\n" > /dev/stderr
   exit 1
 }
 
@@ -88,7 +87,7 @@ bm_add() {
 
 __awk_search() {
   awk -v CLINE="$COL_LINE_NUM" -v CLINK="$COL_LINK" -v CTITLE="$COL_TITLE" \
-    "$@"' {
+    "$*"' {
     LINK=$1; $1="";
     gsub(/[[:blank:]]\+.*($| )/,"");
     print CLINE NR ") " CLINK LINK " " CTITLE $0
