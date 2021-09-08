@@ -95,7 +95,6 @@ __awk_search() {
   }' "$DATA_FILE"
 }
 
-# this entire function is a massive joke
 bm_list() {
   TAG_STRICT="||"
   TITLE_STRICT="&&"
@@ -133,16 +132,14 @@ bm_list() {
   QUERY_TAG="${QUERY_TAG%$TAG_STRICT }"
   QUERY_TITLE="${QUERY_TITLE%$TITLE_STRICT }"
 
-  if [ -z "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ]; then
-    __awk_search
-  elif [ -n "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ]; then
-    __awk_search "$QUERY_TAG"
-  elif [ -z "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ]; then
-    __awk_search "$QUERY_TITLE"
-  elif [ -n "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ]; then
+  if [ -n "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ]; then
     printf '%s\n%s\n' \
       "$(__awk_search "$QUERY_TAG")" "$(__awk_search "$QUERY_TITLE")" |
       sort | uniq -d
+  elif [ -n "$QUERY_TITLE" ] && [ -z "$QUERY_TAG" ]; then
+    __awk_search "$QUERY_TITLE"
+  else
+    __awk_search "$QUERY_TAG"
   fi
 }
 
