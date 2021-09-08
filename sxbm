@@ -121,7 +121,7 @@ bm_list() {
         ;;
       *)
         tmp_title="$(echo "$1" | tr '[:lower:]' '[:upper:]')"
-        QUERY_TITLE="toupper(\$0)~\"[[:blank:]]$tmp_title[[:blank:]]\" $TITLE_STRICT $QUERY_TITLE"
+        QUERY_TITLE="toupper(\$0)~\"[^+]$tmp_title\" $TITLE_STRICT $QUERY_TITLE"
         ;;
     esac
     shift
