@@ -87,10 +87,11 @@ bm_add() {
 }
 
 __awk_search() {
-  awk "$@"' {
+  awk -v CLINE="$COL_LINE_NUM" -v CLINK="$COL_LINK" -v CTITLE="$COL_TITLE" \
+    "$@"' {
     LINK=$1; $1="";
     gsub(/[[:blank:]]\+.*($| )/,"");
-    print NR ") " LINK " " $0
+    print CLINE NR ") " CLINK LINK " " CTITLE $0
   }' "$DATA_FILE"
 }
 
