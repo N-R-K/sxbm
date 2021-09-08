@@ -114,23 +114,20 @@ bm_list() {
     shift
   done
 
-  # search titles
-  # awk 'toupper($0)~"[[:blank:]]SUCKLESS[[:blank:]]" && toupper($0)~"[[:blank:]]ROCKS[[:blank:]]"'
-  # search tags
-  # awk "/[[:blank:]]\+apps($| )/ || /[[:blank:]]\+books($| )/"
   while [ -n "$1" ]; do
     case "$1" in
       +*)
         QUERY_TAG="/[[:blank:]]\\$1($| )/ $TAG_STRICT $QUERY_TAG"
         ;;
       *)
-        tmp_char="$(echo "$1" | tr '[:lower:]' '[:upper:]')"
-        QUERY_TITLE=""
+        tmp_title="$(echo "$1" | tr '[:lower:]' '[:upper:]')"
+        QUERY_TITLE="toupper(\$0)~\"[[:blank:]]$tmp_title[[:blank:]]\" $TITLE_STRICT $QUERY_TITLE"
         ;;
     esac
     shift
   done
   QUERY_TAG="${QUERY_TAG%$TAG_STRICT }"
+  QUERY_TITLE="${QUERY_TITLE%$TITLE_STRICT }"
 
   if [ -z "$QUERY_TAG" ] && [ -z "$QUERY_TITLE" ]; then
     __awk_search
