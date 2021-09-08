@@ -1,0 +1,30 @@
+#!/bin/sh
+
+sxbm="sbm"
+prompt="dmenu -i -l 24"
+
+bm_open() {
+  link_num="$($sxbm ls -c "$@" | $prompt | cut -d ")" -f 1)"
+  [ -n "$link_num" ] && $sxbm open "$link_num"
+}
+
+bm_yank() {
+  link="$($sxbm ls -c "$@" | $prompt | cut -d " " -f 2)"
+  [ -n "$link" ] && echo "$link" | xclip -in -selection clipboard
+}
+
+bm_add() {
+  $sxbm add "$@" | $prompt
+}
+
+case "$1" in
+  "-a"|"--add")
+    shift && bm_add "$@"
+    ;;
+  "-y"|"--yank")
+    shift && bm_yank "$@"
+    ;;
+  *)
+    bm_open "$@"
+    ;;
+esac
