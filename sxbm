@@ -48,7 +48,7 @@ Usage: $APPNAME <command> [<args>]
 
 COMMANDS:
     add           <link> [title] [+tags]
-    ls|list       [-s|--strict] [-c|--disable-colors] [title] [+tags]
+    ls|list       [-s|--strict] [-S] [-c|--disable-colors] [title] [+tags]
     open          [-f|--force] <line_num|title|+tags>
     rm|remove     <line_num>
     edit

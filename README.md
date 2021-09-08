@@ -32,12 +32,6 @@ List all bookmarks.
 sxbm ls
 ```
 
-You can also list bookmarks by title or tags.
-```
-sxbm ls title
-sxbm ls +tag
-```
-
 Edit bookmarks.
 ```
 sxbm edit
@@ -49,6 +43,34 @@ sxbm rm <line_number>
 ```
 
 Run `sxbm --help` to see more detailed usage.
+
+## Searching
+
+Searching by tag
+```
+sxbm ls +tag
+```
+
+Searching by title
+```
+sxbm ls title
+```
+
+By default tag searches are non-strict while title searches are strict.
+
+In other words, `sxbm ls +one +two` will match bookmarks that have EITHER
+`+one` OR `+two`. If you wish to search for a bookmark that contains ALL the
+specified tags then you can pass the `-s` or `--strict` option.
+e.g `sxbm ls -s +one +two +three` will only match bookmarks that have all three
+of the tags.
+
+As for titles, `sxbm ls aplha beta` will match bookmarks that contains BOTH
+`alpha` and `beta`. You can pass the `-S` option to search for entries that
+contain either one of the queries.
+
+One more thing to keep in mind is that title search also matches links. The
+rational is that you may want to search `sxbm ls "gentoo.org"` to find
+bookmarks with the specified url.
 
 ## Todo
 
