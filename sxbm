@@ -88,6 +88,7 @@ bm_add() {
 
 __awk_search() {
   awk "$@"' { LINK=$1; $1="";
+    gsub(/[[:blank:]]\+.*($| )/,"");
     print NR ") " LINK " " $0 }' "$DATA_FILE"
 }
 
