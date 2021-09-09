@@ -9,7 +9,7 @@ Bookmarks are categorized via tags as opposed to the inferior folder structure f
 Cone the repo.
 
 ```
-git clone https://github.com/N-R-K/sxbm.git
+git clone https://codeberg.org/NRK/sxbm.git
 ```
 
 Then just copy/move the script into your $PATH.

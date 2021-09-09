@@ -62,7 +62,7 @@ version() {
   cat << EOF
 $APPNAME $VERSION
 GPLv3 license
-https://github.com/n-r-k/sxbm
+https://codeberg.org/NRK/sxbm
 EOF
 }
 
