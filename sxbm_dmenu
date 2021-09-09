@@ -1,4 +1,10 @@
 #!/bin/sh
+# Description: dmenu/rofi wrapper around sxbm
+# Dependency: sxbm, dmenu/rofi, xclip (optional)
+#
+# Author: NRK
+## Copyright 2021 NRK
+## Licensed under GPL v3. See LICENSE for more details.
 
 sxbm="sbm"
 prompt="dmenu -i -l 24"
