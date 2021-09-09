@@ -6,8 +6,11 @@
 ## Copyright 2021 NRK
 ## Licensed under GPL v3. See LICENSE for more details.
 
-sxbm="sbm"
+# Change "dmenu" to "rofi -dmenu" if you wish to use rofi
+# NOTE: i do not use rofi, and haven't tested if it works or not
 prompt="dmenu -i -l 24"
+# Change this if you have renamed sxbm to something else
+sxbm="sxbm"
 
 bm_open() {
   link_num="$($sxbm ls -c "$@" | $prompt | cut -d ")" -f 1)"
