@@ -72,9 +72,13 @@ One more thing to keep in mind is that title search also matches links. The
 rational is that you may want to search `sxbm ls "gentoo.org"` to find
 bookmarks with the specified url.
 
+## Using it with Dmenu/Rofi
+
+There's an example wrapper [script](extra/sxbm_dmenu) provided which allows you
+to open, copy and add bookmarks via dmenu/rofi.
+
 ## Todo
 
 - [ ] Enhance `remove` arguments. Should take same arguments as `open`.
 - [ ] Enhance `edit` arguments. Should take similar arguments as `open`.
-- [ ] Add a dmenu/rofi wrapper.
 - [ ] Add PGP encryption.
