@@ -132,8 +132,7 @@ bm_list() {
   QUERY_TITLE="${QUERY_TITLE%$TITLE_STRICT }"
 
   if [ -n "$QUERY_TAG" ] && [ -n "$QUERY_TITLE" ]; then
-    printf '%s\n%s\n' \
-      "$(__awk_search "$QUERY_TAG")" "$(__awk_search "$QUERY_TITLE")" |
+    { __awk_search "$QUERY_TAG" & __awk_search "$QUERY_TITLE"; } |
       sort | uniq -d
   elif [ -n "$QUERY_TITLE" ] && [ -z "$QUERY_TAG" ]; then
     __awk_search "$QUERY_TITLE"
