@@ -188,7 +188,7 @@ bm_remove() {
 ### main ###
 ############
 
-[ -z "$1" ] && usage && die "No command given"
+[ -z "$1" ] && { usage; die "No command given"; }
 
 [ -d "$DATA_DIR" ] ||
   mkdir -p "$DATA_DIR" ||
@@ -216,10 +216,10 @@ case "$1" in
     bm_edit "$@"
     ;;
   "-h"|"--help")
-    usage && exit 0
+    usage; exit 0
     ;;
   "-v"|"--version")
-    version && exit 0
+    version; exit 0
     ;;
   *)
     die "Invalid command. Use '$APPNAME -h' for help!"
