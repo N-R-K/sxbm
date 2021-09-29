@@ -13,17 +13,17 @@ prompt="dmenu -i -l 24"
 sxbm="sxbm"
 
 bm_open() {
-  link_num="$($sxbm ls -c "$@" | $prompt | cut -d ")" -f 1)"
-  [ -n "$link_num" ] && $sxbm open "$link_num"
+  link_num="$("$sxbm" ls -c "$@" | $prompt | cut -d ")" -f 1)"
+  [ -n "$link_num" ] && "$sxbm" open "$link_num"
 }
 
 bm_yank() {
-  link="$($sxbm ls -c "$@" | $prompt | cut -d " " -f 2)"
+  link="$("$sxbm" ls -c "$@" | $prompt | cut -d " " -f 2)"
   [ -n "$link" ] && echo "$link" | xclip -in -selection clipboard
 }
 
 bm_add() {
-  $sxbm add "$@" 2>&1 | xargs -I{} $prompt -p {}
+  "$sxbm" add "$@" 2>&1 | xargs -I{} $prompt -p {}
 }
 
 case "$1" in
