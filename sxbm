@@ -37,7 +37,7 @@ ENCRYPTION="0"
 #################
 
 die() {
-  [ -n "$1" ] && printf "$*\n" > /dev/stderr
+  [ -n "$1" ] && printf "$*\n" >&2
   exit 1
 }
 
