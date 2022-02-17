@@ -161,7 +161,7 @@ bm_open() {
   [ "$LINK_NUM" -gt 1 ] && [ -z "$FORCE" ] &&
     die "Too many links\nUse '$APPNAME open -f' to force open them all\n\n$LINK"
 
-  nohup $BROWSER $LINK 1>/dev/null 2>&1 &
+  exec $BROWSER $LINK
 }
 
 bm_edit() {
