@@ -1,4 +1,7 @@
 # sxbm
+
+[![CodeBerg](https://img.shields.io/badge/Hosted_at-Codeberg-%232185D0?style=flat-square&logo=CodeBerg)](https://codeberg.org/NRK/sxbm)
+
 I needed a simple and browser-independent way of managing my bookmarks, leading to the creation of sxbm.
 It's written in strictly POSIX compliant shell, so it should work fine on all \*nix based operating system.
 
@@ -6,8 +9,8 @@ Sxbm stores your bookmarks in a plain text file making it easily portable.
 Bookmarks are categorized via tags as opposed to the inferior folder structure found in browsers.
 
 ## Installation
-Cone the repo.
 
+Cone the repo.
 ```
 git clone https://codeberg.org/NRK/sxbm.git
 ```
@@ -16,6 +19,7 @@ Then just copy/move the script into your $PATH.
 Instead of copying, you can also create a symlink. This way you can do a git pull to get updates.
 
 ## Usage
+
 Adding a bookmark (title and tag are optional.)
 ```
 sxbm add link.com title +tag
