@@ -85,4 +85,5 @@ to open, copy and add bookmarks via dmenu/rofi.
 
 - [ ] Enhance `remove` arguments. Should take same arguments as `open`.
 - [ ] Enhance `edit` arguments. Should take similar arguments as `open`.
-- [ ] Add PGP encryption.
+- [ ] Allow reading the bookmark file via stdin and writing it out via stdout.
+      This would allow someone to easily encrypt their bookmarks if they wish.
