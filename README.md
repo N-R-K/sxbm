@@ -5,60 +5,52 @@
 I needed a simple and browser-independent way of managing my bookmarks, leading to the creation of sxbm.
 It's written in strictly POSIX compliant shell, so it should work fine on all \*nix based operating system.
 
-Sxbm stores your bookmarks in a plain text file making it easily portable.
+sxbm stores your bookmarks in a plain text file making it easily portable.
 Bookmarks are categorized via tags as opposed to the inferior folder structure found in browsers.
 
 ## Installation
 
 Cone the repo.
-```
-git clone https://codeberg.org/NRK/sxbm.git
-```
+
+	git clone https://codeberg.org/NRK/sxbm.git
 
 Then just copy/move the script into your $PATH.
 Instead of copying, you can also create a symlink. This way you can do a git pull to get updates.
 
 ## Usage
 
-Adding a bookmark (title and tag are optional.)
-```
-sxbm add link.com title +tag
-```
+* Adding a bookmark (title and tag are optional.)
 
-Opening a bookmark. You need to specify a title, tag or line\_number.
-If there are multiple results use `sxbm open -f` to open them all.
-```
-sxbm open <title|+tag|line_number>
-```
+	sxbm add link.com title +tag
 
-List all bookmarks.
-```
-sxbm ls
-```
+* Opening a bookmark. You need to specify a title, tag or line\_number.
+  If there are multiple results use `sxbm open -f` to open them all.
 
-Edit bookmarks.
-```
-sxbm edit
-```
+	sxbm open <title|+tag|line_number>
 
-Remove a bookmark.
-```
-sxbm rm <line_number>
-```
+* List all bookmarks.
+
+	sxbm ls
+
+* Edit bookmarks.
+
+	sxbm edit
+
+* Remove a bookmark.
+
+	sxbm rm <line_number>
 
 Run `sxbm --help` to see more detailed usage.
 
 ## Searching
 
-Searching by tag
-```
-sxbm ls +tag
-```
+* Searching by tag
 
-Searching by title
-```
-sxbm ls title
-```
+	sxbm ls +tag
+
+* Searching by title
+
+	sxbm ls title
 
 By default tag searches are non-strict while title searches are strict.
 
@@ -72,8 +64,8 @@ As for titles, `sxbm ls aplha beta` will match bookmarks that contains BOTH
 `alpha` and `beta`. You can pass the `-S` option to search for entries that
 contain either one of the queries.
 
-One more thing to keep in mind is that title search also matches links. The
-rational is that you may want to search `sxbm ls "gentoo.org"` to find
+One more thing to keep in mind is that title search also matches links.
+The rational is that you may want to search `sxbm ls "gentoo.org"` to find
 bookmarks with the specified url.
 
 ## Using it with Dmenu/Rofi
