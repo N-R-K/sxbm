@@ -79,9 +79,8 @@ bm_add() {
 	done
 	[ -z "$LINK" ] && die "No links found"
 
-	echo "$LINK $TITLE $TAGS" >> "$data_file" &&
-		echo "Link $(wc -l < "$data_file") added successfully!" ||
-		die "Couldn't add link"
+	echo "$LINK $TITLE $TAGS" >> "$data_file" || die "Couldn't add link"
+	echo "Link $(wc -l < "$data_file") added successfully!"
 }
 
 __awk_search() {
@@ -177,9 +176,8 @@ bm_remove() {
 	printf "Delete this link? (y/n)\n$LINK\n"
 	read answer
 	if [ "$answer" = "y" ] || [ "$answer" = "yes" ]; then
-		sed -i --follow-symlinks "${1}d" "$data_file" &&
-			echo "Deleted successfully" ||
-			die "Couldn't delete link"
+		sed -i --follow-symlinks "${1}d" "$data_file" || die "Couldn't delete link"
+		echo "Deleted successfully"
 	fi
 }
 
