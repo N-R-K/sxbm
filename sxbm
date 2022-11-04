@@ -33,12 +33,12 @@ col_line_num="\033[1;34m" # Blue
 #
 
 die() {
-  [ -n "$1" ] && printf "$*\n" >&2
-  exit 1
+	[ -n "$1" ] && printf "$*\n" >&2
+	exit 1
 }
 
 usage() {
-  cat << EOF
+	cat << EOF
 Usage: $appname <command> [<args>]
 
 COMMANDS:
@@ -54,7 +54,7 @@ EOF
 }
 
 version() {
-  cat << EOF
+	cat << EOF
 $appname $version
 GPLv3 license
 https://codeberg.org/NRK/sxbm
@@ -62,122 +62,125 @@ EOF
 }
 
 bm_add() {
-  [ -z "$1" ] && die "No arguments provided. Use '$appname -h' for help"
+	[ -z "$1" ] && die "No arguments provided. Use '$appname -h' for help"
 
-  while [ -n "$1" ]; do
-    case "$1" in
-      *.*) [ -z "$LINK" ] &&
-             LINK="$1" ||
-             die "too many links\n$LINK\n$1" ;;
-      +*) TAGS="${TAGS}$1 " ;;
-      *) TITLE="${TITLE}$1 " ;;
-    esac
-    shift
-  done
-  [ -z "$LINK" ] && die "No links found"
+	while [ -n "$1" ]; do
+		case "$1" in
+		*.*)
+			[ -n "$LINK" ] && die "too many links\n$LINK\n$1"
+			LINK="$1"
+		;;
+		+*) TAGS="${TAGS}$1 "
+		;;
+		*) TITLE="${TITLE}$1 "
+		;;
+		esac
+		shift
+	done
+	[ -z "$LINK" ] && die "No links found"
 
-  echo "$LINK $TITLE $TAGS" >> "$data_file" &&
-    echo "Link $(wc -l < "$data_file") added successfully!" ||
-    die "Couldn't add link"
+	echo "$LINK $TITLE $TAGS" >> "$data_file" &&
+		echo "Link $(wc -l < "$data_file") added successfully!" ||
+		die "Couldn't add link"
 }
 
 __awk_search() {
-  awk -v CLINE="$col_line_num" -v CLINK="$col_link" -v CTITLE="$col_title" \
-    "$*"' {
-    LINK=$1; $1="";
-    gsub(/[[:blank:]]\+.*($| )/,"");
-    print CLINE NR ") " CLINK LINK " " CTITLE $0
-  }' "$data_file"
+	awk -v CLINE="$col_line_num" -v CLINK="$col_link" -v CTITLE="$col_title" \
+		"$*"' {
+			LINK=$1; $1="";
+			gsub(/[[:blank:]]\+.*($| )/,"");
+			print CLINE NR ") " CLINK LINK " " CTITLE $0
+		}' "$data_file"
 }
 
 bm_list() {
-  tag_strict="||"
-  title_strict="&&"
+	tag_strict="||"
+	title_strict="&&"
 
-  while [ -n "$1" ]; do
-    case "$1" in
-      "-c"|"--disable-colors")
-        unset col_link col_title col_line_num
-        ;;
-      "-s"|"--strict")
-        tag_strict="&&"
-        ;;
-      "-S")
-        title_strict="||"
-        ;;
-      *)
-        break
-        ;;
-    esac
-    shift
-  done
+	while [ -n "$1" ]; do
+		case "$1" in
+		"-c"|"--disable-colors")
+			unset col_link col_title col_line_num
+		;;
+		"-s"|"--strict")
+			tag_strict="&&"
+		;;
+		"-S")
+			title_strict="||"
+		;;
+		*)
+			break
+		;;
+		esac
+		shift
+	done
 
-  while [ -n "$1" ]; do
-    case "$1" in
-      +*)
-        query_tag="/[[:blank:]]\\$1($| )/ $tag_strict $query_tag"
-        ;;
-      *)
-        tmp_title="$(echo "$1" | tr '[:lower:]' '[:upper:]')"
-        query_title="toupper(\$0)~\"[^+]$tmp_title\" $title_strict $query_title"
-        ;;
-    esac
-    shift
-  done
-  query_tag="${query_tag%$tag_strict }"
-  query_title="${query_title%$title_strict }"
+	while [ -n "$1" ]; do
+		case "$1" in
+		+*)
+			query_tag="/[[:blank:]]\\$1($| )/ $tag_strict $query_tag"
+		;;
+		*)
+			tmp_title="$(echo "$1" | tr '[:lower:]' '[:upper:]')"
+			query_title="toupper(\$0)~\"[^+]$tmp_title\" $title_strict $query_title"
+		;;
+		esac
+		shift
+	done
+	query_tag="${query_tag%$tag_strict }"
+	query_title="${query_title%$title_strict }"
 
-  if [ -n "$query_tag" ] && [ -n "$query_title" ]; then
-    { __awk_search "$query_tag" & __awk_search "$query_title"; } |
-      sort | uniq -d
-  elif [ -n "$query_title" ] && [ -z "$query_tag" ]; then
-    __awk_search "$query_title"
-  else
-    __awk_search "$query_tag"
-  fi
+	if [ -n "$query_tag" ] && [ -n "$query_title" ]; then
+		{ __awk_search "$query_tag" & __awk_search "$query_title"; } |
+			sort | uniq -d
+	elif [ -n "$query_title" ] && [ -z "$query_tag" ]; then
+		__awk_search "$query_title"
+	else
+		__awk_search "$query_tag"
+	fi
 }
 
 bm_open() {
-  if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
-    force=1
-    shift
-  fi
-  [ -z "$1" ] && die "No arguments given"
+	if [ "$1" = "-f" ] || [ "$1" = "--force" ]; then
+		force=1
+		shift
+	fi
+	[ -z "$1" ] && die "No arguments given"
 
-  if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
-    LINK=$(sed -n "s| .*||;${1}p;" "$data_file")
-  else
-    LINK=$(bm_list "-c" "$@" | cut -d " " -f 2)
-  fi
+	if [ -z "$2" ] && [ "$1" -eq "$1" 2>/dev/null ]; then
+		LINK=$(sed -n "s| .*||;${1}p;" "$data_file")
+	else
+		LINK=$(bm_list "-c" "$@" | cut -d " " -f 2)
+	fi
 
-  [ -n "$LINK" ] &&
-    link_num=$(echo "$LINK" | wc -l) ||
-    die "No links found"
+	[ -n "$LINK" ] &&
+		link_num=$(echo "$LINK" | wc -l) ||
+		die "No links found"
 
-  [ "$link_num" -gt 1 ] && [ -z "$force" ] &&
-    die "Too many links\nUse '$appname open -f' to force open them all\n\n$LINK"
+	[ "$link_num" -gt 1 ] && [ -z "$force" ] &&
+		die "Too many links\nUse '$appname open -f' to force open them all\n\n$LINK"
 
-  exec $BROWSER $LINK
+	exec $BROWSER $LINK
 }
 
 bm_edit() {
-  $EDITOR "$data_file"
+	$EDITOR "$data_file"
 }
 
 bm_remove() {
-  [ -z "$1" ] && die "No arguments given"
+	[ -z "$1" ] && die "No arguments given"
 
-  [ "$1" -eq "$1" 2>/dev/null ] &&
-    LINK=$(sed "${1}q;d" "$data_file") ||
-    die "Link not found"
+	[ "$1" -eq "$1" 2>/dev/null ] &&
+		LINK=$(sed "${1}q;d" "$data_file") ||
+		die "Link not found"
 
-  printf "Delete this link? (y/n)\n$LINK\n"
-  read answer
-  if [ "$answer" = "y" ] || [ "$answer" = "yes" ]; then
-    sed -i --follow-symlinks "${1}d" "$data_file" &&
-      echo "Deleted successfully" ||
-      die "Couldn't delete link"
-  fi
+	printf "Delete this link? (y/n)\n$LINK\n"
+	read answer
+	if [ "$answer" = "y" ] || [ "$answer" = "yes" ]; then
+		sed -i --follow-symlinks "${1}d" "$data_file" &&
+			echo "Deleted successfully" ||
+			die "Couldn't delete link"
+	fi
 }
 
 #
@@ -187,37 +190,37 @@ bm_remove() {
 [ -z "$1" ] && { usage; die "No command given"; }
 
 [ -d "$data_dir" ] ||
-  mkdir -p "$data_dir" ||
-  die "Unable to create $data_dir"
+	mkdir -p "$data_dir" ||
+	die "Unable to create $data_dir"
 
 case "$1" in
-  "add")
-    shift
-    bm_add "$@"
-    ;;
-  "ls"|"list")
-    shift
-    bm_list "$@"
-    ;;
-  "open")
-    shift
-    bm_open "$@"
-    ;;
-  "rm"|"remove")
-    shift
-    bm_remove "$@"
-    ;;
-  "edit")
-    shift
-    bm_edit "$@"
-    ;;
-  "-h"|"--help")
-    usage; exit 0
-    ;;
-  "-v"|"--version")
-    version; exit 0
-    ;;
-  *)
-    die "Invalid command. Use '$appname -h' for help!"
-    ;;
+"add")
+	shift
+	bm_add "$@"
+;;
+"ls"|"list")
+	shift
+	bm_list "$@"
+;;
+"open")
+	shift
+	bm_open "$@"
+;;
+"rm"|"remove")
+	shift
+	bm_remove "$@"
+;;
+"edit")
+	shift
+	bm_edit "$@"
+;;
+"-h"|"--help")
+	usage; exit 0
+;;
+"-v"|"--version")
+	version; exit 0
+;;
+*)
+	die "Invalid command. Use '$appname -h' for help!"
+;;
 esac
