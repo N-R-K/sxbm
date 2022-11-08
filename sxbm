@@ -13,7 +13,7 @@
 
 # Appname and Version
 appname="sxbm"
-version="v0.5"
+version="v0.5.1"
 
 # Where all the bookmarks get stored
 # Respects XDG_DATA_HOME if set
