@@ -21,24 +21,34 @@ Instead of copying, you can also create a symlink. This way you can do a git pul
 
 * Adding a bookmark (title and tag are optional.)
 
-	sxbm add link.com title +tag
+```
+sxbm add link.com title +tag
+```
 
 * Opening a bookmark. You need to specify a title, tag or line\_number.
   If there are multiple results use `sxbm open -f` to open them all.
 
-	sxbm open <title|+tag|line_number>
+```
+sxbm open <title|+tag|line_number>
+```
 
 * List all bookmarks.
 
-	sxbm ls
+```
+sxbm ls
+```
 
 * Edit bookmarks.
 
-	sxbm edit
+```
+sxbm edit
+```
 
 * Remove a bookmark.
 
-	sxbm rm <line_number>
+```
+sxbm rm <line_number>
+```
 
 Run `sxbm --help` to see more detailed usage.
 
@@ -46,11 +56,15 @@ Run `sxbm --help` to see more detailed usage.
 
 * Searching by tag
 
-	sxbm ls +tag
+```
+sxbm ls +tag
+```
 
 * Searching by title
 
-	sxbm ls title
+```
+sxbm ls title
+```
 
 By default tag searches are non-strict while title searches are strict.
 
